@@ -1,7 +1,7 @@
 package jimirc.net.client;
 
 import jimirc.net.IRCConnection;
-import jimirc.net.IRCMessageListener;
+import jimirc.net.IRCConnectionListener;
 import jimirc.net.IRCMessage;
 import jimirc.net.util.MessageUtils;
 
@@ -17,11 +17,14 @@ import java.util.ArrayList;
  *       (The PING messages are not delivered to the message listener)
  */
 public class OutGoingIRCConnection implements IRCConnection {
+    private String host;
+    private int port;
+
     private ReceiverThread receiverThread;
     private SenderThread senderThread;
     private List outputQueue;
 
-    private IRCMessageListener listener;
+    private IRCConnectionListener listener;
 
     private Socket socket;
     private BufferedReader in;
@@ -29,12 +32,10 @@ public class OutGoingIRCConnection implements IRCConnection {
 
     public OutGoingIRCConnection(String host,
                                  int port,
-                                 IRCMessageListener listener,
+                                 IRCConnectionListener listener,
                                  String nickName,
                                  String userName,
-                                 String realName)
-            throws IOException
-    {
+                                 String realName) {
         this(host, port, listener);
         send(new IRCMessage(IRCMessage.COMMAND_NICK, nickName));
         send(new IRCMessage(IRCMessage.COMMAND_USER, new String[]{userName, "0", "*", realName}));
@@ -42,16 +43,12 @@ public class OutGoingIRCConnection implements IRCConnection {
 
     private OutGoingIRCConnection(String host,
                                   int port,
-                                  IRCMessageListener listener)
-            throws IOException
-    {
+                                  IRCConnectionListener listener) {
+        this.host = host;
+        this.port = port;
         this.listener = listener;
-        this.socket = new Socket(host, port);
-        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "ascii"));
-        this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "ascii"));
         this.outputQueue = new ArrayList();
         this.senderThread = new SenderThread();
-        this.receiverThread = new ReceiverThread();
     }
 
     public void send(IRCMessage message) {
@@ -59,6 +56,10 @@ public class OutGoingIRCConnection implements IRCConnection {
             outputQueue.add(message);
             outputQueue.notifyAll();
         }
+    }
+
+    public boolean isIncoming() {
+        return false;
     }
 
     private IRCMessage getNextFromSendQueueMessage() {
@@ -80,6 +81,12 @@ public class OutGoingIRCConnection implements IRCConnection {
 
         public void run() {
             try {
+                OutGoingIRCConnection.this.socket = new Socket(host, port);
+                OutGoingIRCConnection.this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "ascii"));
+                OutGoingIRCConnection.this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "ascii"));
+                OutGoingIRCConnection.this.listener.connected(OutGoingIRCConnection.this);
+                OutGoingIRCConnection.this.receiverThread = new ReceiverThread();
+
                 while (true) {
                     IRCMessage message = getNextFromSendQueueMessage();
 

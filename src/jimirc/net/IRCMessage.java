@@ -9,6 +9,7 @@ import jimirc.net.util.MessageUtils;
  *
  */
 public class IRCMessage {
+    public static final int MAX_BYTE_SIZE = 512;
 
     public static final int COMMAND_PASS = 1000;
     public static final int COMMAND_NICK = 1001;

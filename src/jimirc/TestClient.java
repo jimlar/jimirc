@@ -5,15 +5,11 @@ import jimirc.net.client.OutGoingIRCConnection;
 
 import java.io.*;
 
-public class TestClient implements IRCMessageListener {
+public class TestClient implements IRCConnectionListener {
     private OutGoingIRCConnection connection;
 
     public TestClient(String host, int port) {
-        try {
-            this.connection = new OutGoingIRCConnection(host, port, this, "JimIRC", "jimmy", "Jimmy Larsson");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.connection = new OutGoingIRCConnection(host, port, this, "JimIRC", "jimmy", "Jimmy Larsson");
     }
 
     public void commandReceived(IRCConnection connection, IRCMessage message) {
@@ -33,6 +29,10 @@ public class TestClient implements IRCMessageListener {
 
     public void connectionFailed(IRCConnection connection, Exception e) {
         e.printStackTrace();
+    }
+
+    public void connected(IRCConnection connection) {
+        System.out.println("Connected");
     }
 
     public static void main(String args[]) throws Exception {

@@ -8,5 +8,17 @@ package jimirc.net;
  */
 public interface IRCConnection {
 
+    /**
+     * @return true if this connection is incoming
+     *         false if its an tougoing connection
+     *
+     * Note: an outgoing connection is a connection to a server, and incoming
+     *       is from a client or another server
+     */
+    boolean isIncoming();
+
+    /**
+     * Send a message to the connection
+     */
     void send(IRCMessage message);
 }
