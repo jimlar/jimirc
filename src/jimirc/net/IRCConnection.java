@@ -6,6 +6,8 @@ import java.net.*;
 /**
  * A connection to an IRC server
  * 
+ * Note: the connection itself handles pong'ing the pings
+ *       (The PING messages are not delivered to the message listener)
  */
 public class IRCConnection {
     private InputReader inputReader;
@@ -39,12 +41,13 @@ public class IRCConnection {
 	    try {
 		while (true) {
 		    String line = in.readLine();
-		    IRCMessage message = MessageDecoder.parseMessage(line);
+		    IRCMessage message = MessageUtils.getInstance().parseMessage(line);
 
 		    if (message != null) {
-			listener.messageReceived(message);
+			deliverMessage(message);
 		    } else {
-			System.err.println("Got bad message: " + line);
+			listener.connectionFailed(new IOException("Got bad message: " + line));
+			break;
 		    }
 		}
 	    } catch (Exception e) {
@@ -61,6 +64,15 @@ public class IRCConnection {
 	    try {
 		socket.close();
 	    } catch (Exception e) {}
+	}
+
+	private void deliverMessage(IRCMessage message) throws IOException {
+
+	    if (message.getMessageId() == IRCMessage.COMMAND_PING) {
+		send(new IRCMessage(IRCMessage.COMMAND_PONG, message.getParameters()[0]));
+	    } else {
+		listener.messageReceived(message);
+	    }
 	}
     }
 }
