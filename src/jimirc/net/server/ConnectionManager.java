@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.nio.channels.SelectableChannel;
 import java.io.IOException;
 
 /**
@@ -52,11 +53,11 @@ class ConnectionManager extends Thread {
     }
 
     /**
-     * Block until at least one connection is ready for i/o
+     * Block until at least one connection is ready for i/o or one second has passed
      */
     private List waitForReadyConnections() throws IOException {
         List result = new ArrayList();
-        selector.select();
+        selector.select(1000);
         Set selectedKeys = selector.selectedKeys();
         for (Iterator i = selectedKeys.iterator(); i.hasNext();) {
             SelectionKey key = (SelectionKey) i.next();

@@ -2,6 +2,8 @@ package jimirc.net.server;
 
 import jimirc.net.IRCConnection;
 import jimirc.net.IRCMessage;
+import jimirc.net.IRCConnectionListener;
+import jimirc.net.util.MessageUtils;
 
 import java.nio.channels.SocketChannel;
 import java.nio.ByteBuffer;
@@ -12,15 +14,22 @@ import java.util.Collections;
 import java.util.Arrays;
 
 class IncomingIRCConnection implements IRCConnection {
+    private static final byte CRLF_BYTES[] = new byte[] { (byte) '\r', (byte) '\n' };
+
     private SocketChannel channel;
+    private IRCConnectionListener listener;
 
     private List outputQueue;
 
     private ByteBuffer outputBuffer;
     private ByteBuffer inputBuffer;
 
-    public IncomingIRCConnection(SocketChannel channel) throws IOException {
+    public IncomingIRCConnection(SocketChannel channel,
+                                 IRCConnectionListener listener)
+            throws IOException
+    {
         this.channel = channel;
+        this.listener = listener;
         this.channel.configureBlocking(false);
         this.outputQueue = Collections.synchronizedList(new ArrayList());
 
@@ -43,24 +52,78 @@ class IncomingIRCConnection implements IRCConnection {
 
     public void send(IRCMessage message) {
         outputQueue.add(message);
-        processOutput();
+        try {
+            processOutput();
+        } catch (Exception e) {
+            listener.connectionFailed(this, e);
+        }
     }
 
     public void process() {
-        processOutput();
-        processInput();
+        try {
+            if (channel.isConnectionPending()) {
+                channel.finishConnect();
+            }
+
+            processOutput();
+            processInput();
+        } catch (Exception e) {
+            listener.connectionFailed(this, e);
+        }
     }
 
 
-    private void processInput() {
+    private void processInput() throws IOException {
         if (inputBuffer.hasRemaining()) {
             channel.read(inputBuffer);
         }
 
-
+        IRCMessage message = decodeIncomingMessage();
+        if (message != null) {
+            if (message.isCommand()) {
+                this.listener.commandReceived(this, message);
+            } else if (message.isReply()) {
+                this.listener.replyReceived(this, message);
+            } else if (message.isError()) {
+                this.listener.errorReceived(this, message);
+            }
+        }
     }
 
-    private synchronized void processOutput() {
+    private int indexOfCRLF() {
+        for (int i = 0; i < inputBuffer.position(); i++) {
+
+            if (inputBuffer.get(i) == CRLF_BYTES[0]
+                    && i < inputBuffer.capacity()
+                    && inputBuffer.get(i + 1) == CRLF_BYTES[1])
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private IRCMessage decodeIncomingMessage() throws IOException {
+
+        int i = indexOfCRLF();
+        if (i == -1) {
+            return null;
+        }
+
+        byte[] messageBytes = new byte[i];
+        inputBuffer.rewind();
+        inputBuffer.get(messageBytes, 0, i);
+        String messageLine = new String(messageBytes, "ascii");
+
+        /* discard the cr/lf */
+        inputBuffer.get();
+        inputBuffer.get();
+        inputBuffer.compact();
+
+        return MessageUtils.getInstance().parseMessage(messageLine);
+    }
+
+    private synchronized void processOutput() throws IOException {
         if (outputBuffer.hasRemaining()) {
             channel.write(outputBuffer);
         } else {
@@ -71,7 +134,7 @@ class IncomingIRCConnection implements IRCConnection {
     /**
      * prepare next message to be sent
      */
-    private void prepareNextOutput() {
+    private void prepareNextOutput() throws IOException {
 
         IRCMessage message = null;
         try {

@@ -255,23 +255,30 @@
   </component>
   <component class="com.intellij.ide.desktop.IdeDocumentManager">
     <recent_files>
-      <file_info url="file://$PROJECT_DIR$/src/META-INF/MANIFEST.MF" column="23" line="0" />
-      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/util/MessageUtils.java" column="0" line="286" />
-      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/IRCConnection.java" column="40" line="15" />
-      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/IRCConnectionListener.java" column="20" line="11" />
-      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/IRCServer.java" column="30" line="29" />
-      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/IRCServerAcceptor.java" column="13" line="29" />
-      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/client/OutGoingIRCConnection.java" column="21" line="99" />
       <file_info url="file://$PROJECT_DIR$/src/jimirc/TestClient.java" column="37" line="34" />
-      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/IRCMessage.java" column="47" line="11" />
-      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/ConnectionManager.java" column="17" line="46" />
-      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/IncomingIRCConnection.java" column="28" line="80" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/IRCMessage.java" column="0" line="0" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/IRCConnectionListener.java" column="17" line="5" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/util/MessageUtils.java" column="29" line="240" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/IRCConnection.java" column="17" line="8" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/client/OutGoingIRCConnection.java" column="0" line="21" />
+      <file_info url="file://$PROJECT_DIR$/src/META-INF/MANIFEST.MF" column="29" line="0" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/IRCServer.java" column="38" line="32" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/IRCServerAcceptor.java" column="45" line="37" />
+      <file_info url="jar:///usr/java/j2sdk1.4.0/src.zip!/java/nio/channels/spi/AbstractSelector.java" column="32" line="152" />
+      <file_info url="jar:///usr/java/j2sdk1.4.0/src.zip!/java/nio/channels/spi/AbstractSelectableChannel.java" column="37" line="180" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/IncomingIRCConnection.java" column="0" line="121" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/ConnectionManager.java" column="0" line="63" />
     </recent_files>
     <open_files>
-      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/ConnectionManager.java" column="17" line="46" />
-      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/IncomingIRCConnection.java" column="28" line="80" />
-      <active_file url="file://$PROJECT_DIR$/src/jimirc/net/server/IncomingIRCConnection.java" />
-      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/IRCMessage.java" column="47" line="11" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/ConnectionManager.java" column="0" line="63" />
+      <active_file url="file://$PROJECT_DIR$/src/jimirc/net/server/ConnectionManager.java" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/IncomingIRCConnection.java" column="0" line="121" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/IRCServerAcceptor.java" column="45" line="37" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/server/IRCServer.java" column="38" line="32" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/util/MessageUtils.java" column="29" line="240" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/IRCConnection.java" column="17" line="8" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/IRCConnectionListener.java" column="17" line="5" />
+      <file_info url="file://$PROJECT_DIR$/src/jimirc/net/client/OutGoingIRCConnection.java" column="0" line="21" />
     </open_files>
   </component>
   <component class="com.intellij.ide.hierarchy.HierarchyBrowserManager">
@@ -284,12 +291,13 @@
     <navigator id="ProjectNavigator" flattenPackages="false" showMembers="false" />
     <navigator id="ClasspathNavigator" flattenPackages="false" showMembers="false" />
     <navigator id="SourcepathNavigator" flattenPackages="false" showMembers="false">
-      <expanded_node type="directory" url="file://$PROJECT_DIR$/src" />
-      <expanded_node type="directory" url="file://$PROJECT_DIR$/src/jimirc/net/client" />
-      <expanded_node type="directory" url="file://$PROJECT_DIR$/src/jimirc/net/server" />
+      <expanded_node type="directory" url="file://$PROJECT_DIR$/src/jimirc/net/util" />
       <expanded_node type="directory" url="file://$PROJECT_DIR$/src/META-INF" />
+      <expanded_node type="directory" url="file://$PROJECT_DIR$/src/jimirc/net/server" />
+      <expanded_node type="directory" url="file://$PROJECT_DIR$/src" />
       <expanded_node type="directory" url="file://$PROJECT_DIR$/src/jimirc/net" />
       <expanded_node type="directory" url="file://$PROJECT_DIR$/src/jimirc" />
+      <expanded_node type="directory" url="file://$PROJECT_DIR$/src/jimirc/net/client" />
     </navigator>
   </component>
   <component class="com.intellij.ide.structureView.StructureViewFactory">
