@@ -1,5 +1,7 @@
 package jimirc.net;
 
+import jimirc.net.util.MessageUtils;
+
 /**
  * Represent and IRC message (command/reply/error message)
  *

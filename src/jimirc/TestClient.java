@@ -1,13 +1,14 @@
 package jimirc;
 
 import jimirc.net.*;
+import jimirc.net.client.OutGoingIRCConnection;
 
 import java.io.*;
 
-public class Client implements IRCMessageListener {
+public class TestClient implements IRCMessageListener {
     private OutGoingIRCConnection connection;
 
-    public Client(String host, int port) {
+    public TestClient(String host, int port) {
         try {
             this.connection = new OutGoingIRCConnection(host, port, this, "JimIRC", "jimmy", "Jimmy Larsson");
         } catch (IOException e) {
@@ -35,7 +36,7 @@ public class Client implements IRCMessageListener {
     }
 
     public static void main(String args[]) throws Exception {
-        Client client = new Client("192.168.1.1", 6667);
+        TestClient client = new TestClient("192.168.1.1", 6667);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String line;

@@ -1,15 +1,17 @@
-package jimirc.net;
+package jimirc.net.util;
+
+import jimirc.net.IRCMessage;
 
 import java.util.*;
 
-class MessageUtils {
+public class MessageUtils {
     private static MessageUtils instance;
 
     private Map commandsByMessageId;
     private Map messageIdsByCommand;
 
 
-    static MessageUtils getInstance() {
+    public static MessageUtils getInstance() {
         if (instance == null) {
             instance = new MessageUtils();
         }
@@ -206,7 +208,7 @@ class MessageUtils {
         addMapping(IRCMessage.ERROR_USERSDONTMATCH, "502");
     }
 
-    IRCMessage parseMessage(String line) {
+    public IRCMessage parseMessage(String line) {
         String prefix = null;
         String command = null;
 
@@ -232,7 +234,7 @@ class MessageUtils {
                 parseParameters(line.substring(i + 1)));
     }
 
-    String getCommandString(int messageId) {
+    public String getCommandString(int messageId) {
         return (String) commandsByMessageId.get(new Integer(messageId));
     }
 

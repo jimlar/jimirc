@@ -1,4 +1,9 @@
-package jimirc.net;
+package jimirc.net.client;
+
+import jimirc.net.IRCConnection;
+import jimirc.net.IRCMessageListener;
+import jimirc.net.IRCMessage;
+import jimirc.net.util.MessageUtils;
 
 import java.io.*;
 import java.net.Socket;
