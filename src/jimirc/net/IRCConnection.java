@@ -18,14 +18,15 @@ public class IRCConnection {
     public IRCConnection(String host, int port, IRCMessageListener listener) throws IOException {
 	this.listener = listener;
 	this.socket = new Socket(host, port);
-	this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-	this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+	this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "ascii"));
+	this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "ascii"));
 	this.inputReader = new InputReader();
     }
 
-    public void send(String message) throws IOException {
+    public void send(IRCMessage message) throws IOException {
 	out.write(message + "\r\n");
 	out.flush();
+	System.out.println("SEND--->" + message);
     }
 
     private class InputReader extends Thread {
@@ -38,7 +39,7 @@ public class IRCConnection {
 	    try {
 		while (true) {
 		    String line = in.readLine();
-		    IRCMessage message = parseMessage(line);
+		    IRCMessage message = MessageDecoder.parseMessage(line);
 
 		    if (message != null) {
 			listener.messageReceived(message);
@@ -60,36 +61,6 @@ public class IRCConnection {
 	    try {
 		socket.close();
 	    } catch (Exception e) {}
-	}
-
-	private IRCMessage parseMessage(String line) {
-	    String prefix = null;
-	    String command = null;
-	    String parameters = null;
-
-	    boolean hasPrefix = line.startsWith(":");
-
-	    if (hasPrefix) {
-		int i = line.indexOf(" ");
-		if (i == -1) {
-		    return null;
-		}
-		prefix = line.substring(1, i);
-		line = line.substring(i + 1);
-	    }
-
-	    int i = line.indexOf(" ");
-	    if (i == -1) {
-		return null;
-	    }
-	    command = line.substring(0, i);
-	    parameters = line.substring(i + 1);
-
-	    if (parameters.equals("")) {
-		parameters = null;
-	    }
-
-	    return new IRCMessage(prefix, command, parameters);
 	}
     }
 }

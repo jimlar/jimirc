@@ -9,8 +9,8 @@ public class Client implements IRCMessageListener {
     public Client(String host, int port) {
 	try {
 	    this.connection = new IRCConnection(host, port, this);
-	    connection.send("USER jimmy * * :Jimmy Larsson");
-	    connection.send("NICK jim");
+	    connection.send(new IRCMessage("USER", new String[] { "jimmy", "*", "*", "Jimmy Larsson" }));
+	    connection.send(new IRCMessage("NICK", "jim"));
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
@@ -18,7 +18,21 @@ public class Client implements IRCMessageListener {
     }
 
     public void messageReceived(IRCMessage message) {
-	System.out.println("Got: " + message);
+	System.out.println("RECV--->" + message);
+
+	String command = message.getCommand();
+	try {
+	    if (command.equals("001")) {
+		connection.send(new IRCMessage("JOIN", "#test"));
+	    }
+
+	    if (command.equals("PING")) {
+		connection.send(new IRCMessage("PONG", message.getParameters()[0]));
+	    }
+
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
     }
 
     public void connectionFailed(Exception e) {
@@ -31,7 +45,7 @@ public class Client implements IRCMessageListener {
 	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	String line;
 	while ((line = reader.readLine()) != null) {
-	    client.connection.send(line);
+	    client.connection.send(new IRCMessage("PRIVMSG", new String[] { "#test", line}));
 	}
 
     }
