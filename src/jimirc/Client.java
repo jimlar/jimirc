@@ -9,8 +9,8 @@ public class Client implements IRCMessageListener {
     public Client(String host, int port) {
 	try {
 	    this.connection = new IRCConnection(host, port, this);
-	    connection.send(new IRCMessage(IRCMessage.COMMAND_USER, new String[] { "jimmy", "0", "*", "Jimmy Larsson" }));
 	    connection.send(new IRCMessage(IRCMessage.COMMAND_NICK, "jim"));
+	    connection.send(new IRCMessage(IRCMessage.COMMAND_USER, new String[] { "jimmy", "0", "*", "Jimmy Larsson" }));
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
