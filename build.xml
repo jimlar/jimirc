@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<project name="JimIRC" default="jimirc" basedir=".">
+
+
+  <property name="build.compiler" value="jikes" />
+
+  <property name="classpath" value="src:
+		                    build/classes"/>
+
+  <!-- clean -->
+  <target name="clean">
+    <delete dir="build" />
+  </target>
+
+  <!-- compile -->
+  <target name="compile">
+    <mkdir dir="build/classes"/>
+
+    <javac destdir="build/classes"
+	   classpath="${classpath}"
+	   includes="**/*.java">
+      <src path="src"/>
+    </javac>
+  </target>
+
+  <!-- jimirc -->
+  <target name="jimirc" depends="compile">
+
+    <jar jarfile="build/jimirc.jar"
+         manifest="src/META-INF/MANIFEST.MF">
+
+         <fileset dir="build/classes" includes="**/*.class"/>
+    </jar>
+  </target>
+
+</project>
