@@ -5,7 +5,9 @@ package jimirc.net;
  */
 public interface IRCMessageListener {
 
-    void messageReceived(IRCMessage message);
+    void commandReceived(IRCConnection connection, IRCMessage message);
+    void replyReceived(IRCConnection connection, IRCMessage message);
+    void errorReceived(IRCConnection connection, IRCMessage message);
 
-    void connectionFailed(Exception e);
+    void connectionFailed(IRCConnection connection, Exception e);
 }

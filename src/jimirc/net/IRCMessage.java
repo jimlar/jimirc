@@ -199,75 +199,75 @@ public class IRCMessage {
     private String parameters[];
 
     public IRCMessage(int messageId, String parameter) {
-	this(messageId, new String[] { parameter });
+        this(messageId, new String[]{parameter});
     }
 
     public IRCMessage(int messageId, String parameters[]) {
-	this(null, messageId, parameters);
+        this(null, messageId, parameters);
     }
 
     public IRCMessage(String prefix, int messageId, String parameters[]) {
-	this.prefix = prefix;
-	this.messageId = messageId;
-	this.parameters = parameters;
+        this.prefix = prefix;
+        this.messageId = messageId;
+        this.parameters = parameters;
     }
 
     public boolean hasPrefix() {
-	return prefix != null;
+        return prefix != null;
     }
 
     public String getPrefix() {
-	return prefix;
+        return prefix;
     }
 
     public boolean isCommand() {
-	return messageId < 2000;	
+        return messageId < 2000;
     }
 
     public boolean isReply() {
-	return messageId >= 2000 && messageId < 3000;	
+        return messageId >= 2000 && messageId < 3000;
     }
 
     public boolean isError() {
-	return messageId >= 3000;
+        return messageId >= 3000;
     }
 
     public int getMessageId() {
-	return messageId;
+        return messageId;
     }
 
     public boolean hasParameters() {
-	return parameters.length > 0;
+        return parameters.length > 0;
     }
 
     /**
      * @return parameter list or empty string array if no parameters
      */
     public String[] getParameters() {
-	return parameters;
+        return parameters;
     }
 
     public String toString() {
-	return (hasPrefix() ? (":" + prefix + " ") : "")
-	    + MessageUtils.getInstance().getCommandString(messageId)
-	    + (hasParameters() ? (" " + parametersToString()) : "");
+        return (hasPrefix() ? (":" + prefix + " ") : "")
+                + MessageUtils.getInstance().getCommandString(messageId)
+                + (hasParameters() ? (" " + parametersToString()) : "");
     }
 
     private String parametersToString() {
-	StringBuffer result = new StringBuffer();
-	for (int i = 0; i < parameters.length; i++) {
-	    String parameter = parameters[i];
-	    
-	    if (i > 0) {
-		result.append(" ");
-	    }
-	    if (i == parameters.length - 1) {
-		    if (parameter.indexOf(" ") != -1) {
-			result.append(":");
-		    }
-	    }
-	    result.append(parameter);
-	}
-	return result.toString();
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < parameters.length; i++) {
+            String parameter = parameters[i];
+
+            if (i > 0) {
+                result.append(" ");
+            }
+            if (i == parameters.length - 1) {
+                if (parameter.indexOf(" ") != -1) {
+                    result.append(":");
+                }
+            }
+            result.append(parameter);
+        }
+        return result.toString();
     }
 }
