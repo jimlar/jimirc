@@ -17,7 +17,7 @@ public class Client implements IRCMessageListener {
         System.out.println("Connected to " + host + ":" + port);
     }
 
-    public void messageReceived(String message) {
+    public void messageReceived(IRCMessage message) {
 	System.out.println("Got: " + message);
     }
 
@@ -25,7 +25,14 @@ public class Client implements IRCMessageListener {
 	e.printStackTrace();
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Exception {
 	Client client = new Client("localhost", 6667);
+
+	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	String line;
+	while ((line = reader.readLine()) != null) {
+	    client.connection.send(line);
+	}
+
     }
 }

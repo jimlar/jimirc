@@ -38,7 +38,13 @@ public class IRCConnection {
 	    try {
 		while (true) {
 		    String line = in.readLine();
-		    listener.messageReceived(line);
+		    IRCMessage message = parseMessage(line);
+
+		    if (message != null) {
+			listener.messageReceived(message);
+		    } else {
+			System.err.println("Got bad message: " + line);
+		    }
 		}
 	    } catch (Exception e) {
 		listener.connectionFailed(e);
@@ -54,6 +60,36 @@ public class IRCConnection {
 	    try {
 		socket.close();
 	    } catch (Exception e) {}
+	}
+
+	private IRCMessage parseMessage(String line) {
+	    String prefix = null;
+	    String command = null;
+	    String parameters = null;
+
+	    boolean hasPrefix = line.startsWith(":");
+
+	    if (hasPrefix) {
+		int i = line.indexOf(" ");
+		if (i == -1) {
+		    return null;
+		}
+		prefix = line.substring(1, i);
+		line = line.substring(i + 1);
+	    }
+
+	    int i = line.indexOf(" ");
+	    if (i == -1) {
+		return null;
+	    }
+	    command = line.substring(0, i);
+	    parameters = line.substring(i + 1);
+
+	    if (parameters.equals("")) {
+		parameters = null;
+	    }
+
+	    return new IRCMessage(prefix, command, parameters);
 	}
     }
 }
